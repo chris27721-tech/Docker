@@ -1,0 +1,17 @@
+version: '1.0'
+services:
+db:
+image: mysql:latest
+container_name: mysql-db
+environment:
+MYSQL_ROOT_PASSWORD: G)4]DN2.GP+<m[(5$dtB
+MYSQL_DATABASE: vereinsverwaltung
+MYSQL_USER: mysql-lbsv-verein
+MYSQL_PASSWORD: bn%iWIBh29iy\4)Z;GbL
+ports:
+- "3306:3306"
+volumes:
+- db_data:/var/lib/mysql
+- ./mysql-config:/etc/mysql/conf.d
+volumes:
+db_data:
