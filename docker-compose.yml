@@ -1,4 +1,4 @@
-version: '1.1'
+version: '1.2'
 
 services:
   db:
@@ -7,10 +7,11 @@ services:
     restart: unless-stopped
 
     environment:
-      MYSQL_ROOT_PASSWORD: 'TWcjTkJsiM559cQabQVY'
+      MYSQL_ROOT_PASSWORD: ${LBSV_DB_VEREIN_ROOT}
       MYSQL_DATABASE: 'vereinsverwaltung'
       MYSQL_USER: 'lbsvverein'
-      MYSQL_PASSWORD: 'e3myowpVubzWkt4jZdL9'
+      MYSQL_PASSWORD: ${LBSV_DB_VEREIN_USER}
+
 
     volumes:
       - ./mysql_data:/var/lib/mysql
@@ -34,6 +35,58 @@ services:
       - "8080:80"
     networks:
       - verein-net
+
+  wordpress-db:
+    image: mysql:latest
+    container_name: wordpress-db
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: ${LBSV_DB_WP_USER}
+      MYSQL_ROOT_PASSWORD: ${LBSV_DB_WP_ROOT}
+
+    volumes:
+      - wordpress_db:/var/lib/mysql
+
+    networks:
+      wordpress-network:
+        aliases:
+          - wordpress-db    
+
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    restart: unless-stopped
+
+    depends_on:
+      - wordpress-db
+
+    ports:
+      - "8080:80"
+
+    environment:
+      WORDPRESS_DB_HOST: wordpress-db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: ${LBSV_DB_WP_ROOT}
+
+    volumes:
+      - wordpress_data:/var/www/html
+
+    networks:
+      - wordpress-network
+
 networks:
   verein-net:
+    driver: bridge  
+  monitor-net:
     driver: bridge
+  wordpress-network:
+    driver: bridge
+
+volumes:
+  wordpress_db:
+  wordpress_data:
