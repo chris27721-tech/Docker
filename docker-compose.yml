@@ -126,8 +126,6 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1
 
     networks:
-      bridge:
-        ipv4_address: 172.17.0.10
       verein-net:
         ipv4_address: 172.18.0.10
       monitor-net:
