@@ -53,3 +53,10 @@ wireguard:
         ipv4_address: 172.20.0.10
       wireguard-net:
         ipv4_address: 172.21.0.10
+
+wireguard-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1
