@@ -100,7 +100,7 @@ services:
       - SERVERPORT=51820
 
       # Clients automatisch erzeugen
-      - PEERS=notebook,iphone,tablet
+      - PEERS=client01
 
       # DNS für VPN-Clients
       - PEERDNS=1.1.1.1
