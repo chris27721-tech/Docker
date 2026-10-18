@@ -1,62 +1,61 @@
-wireguard:
-    image: lscr.io/linuxserver/wireguard:latest
-    container_name: wireguard
-    restart: unless-stopped
+version: '1.2'
 
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Berlin
-
-      # Öffentliche IP oder DNS-Name deines Servers
-      - SERVERURL=imlgviu4so8fljpz.myfritz.net
-
-      # Öffentlicher WireGuard UDP-Port
-      - SERVERPORT=51820
-
-      # Clients automatisch erzeugen
-      - PEERS=client01
-
-      # DNS für VPN-Clients
-      - PEERDNS=1.1.1.1
-
-      # VPN-Netzwerk
-      - INTERNAL_SUBNET=172.13.13.0
-
-      # Full-Tunnel:
-      # kompletter Client-Traffic geht durch VPN
-      - ALLOWEDIPS=0.0.0.0/0
-
-      # Client-Konfigurationen im Log/QR-Code anzeigen
-      - LOG_CONFS=true
-
-    volumes:
-      - wireguard_config:/config
-      - /lib/modules:/lib/modules:ro
-
-    ports:
-      - "51820:51820/udp"
-
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-
-    networks:
-      verein-net:
-        ipv4_address: 172.18.0.10
-      monitor-net:
-        ipv4_address: 172.19.0.10
-      wordpress-net:
-        ipv4_address: 172.20.0.10
-      wireguard-net:
-        ipv4_address: 172.21.0.10
-
-wireguard-net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.21.0.0/16
-          gateway: 172.21.0.1
+services:
+    wireguard:
+        image: lscr.io/linuxserver/wireguard:latest
+        container_name: wireguard
+        restart: unless-stopped
+    
+        cap_add:
+          - NET_ADMIN
+          - SYS_MODULE
+    
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Europe/Berlin
+    
+          # Öffentliche IP oder DNS-Name deines Servers
+          - SERVERURL=imlgviu4so8fljpz.myfritz.net
+    
+          # Öffentlicher WireGuard UDP-Port
+          - SERVERPORT=51820
+    
+          # Clients automatisch erzeugen
+          - PEERS=client01
+    
+          # DNS für VPN-Clients
+          - PEERDNS=1.1.1.1
+    
+          # VPN-Netzwerk
+          - INTERNAL_SUBNET=172.13.13.0
+    
+          # Full-Tunnel:
+          # kompletter Client-Traffic geht durch VPN
+          - ALLOWEDIPS=0.0.0.0/0
+    
+          # Client-Konfigurationen im Log/QR-Code anzeigen
+          - LOG_CONFS=true
+    
+        volumes:
+          - wireguard_config:/config
+          - /lib/modules:/lib/modules:ro
+    
+        ports:
+          - "51820:51820/udp"
+    
+        sysctls:
+          - net.ipv4.conf.all.src_valid_mark=1
+    
+        networks:
+          wireguard-net:
+            ipv4_address: 172.21.0.2
+networks:
+    wireguard-net:
+        driver: bridge
+        ipam:
+          config:
+            - subnet: 172.21.0.0/16
+              gateway: 172.21.0.1
+volumes:
+    wireguard_config:
