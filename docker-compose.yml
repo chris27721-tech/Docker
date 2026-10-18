@@ -71,7 +71,7 @@ services:
       WORDPRESS_DB_HOST: wordpress-db:3306
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: ${LBSV_DB_WP_ROOT}
+      WORDPRESS_DB_PASSWORD: ${LBSV_DB_WP_USER}
 
     volumes:
       - wordpress_data:/var/www/html
