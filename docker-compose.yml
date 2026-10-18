@@ -51,7 +51,7 @@ services:
       - wordpress_db:/var/lib/mysql
 
     networks:
-      wordpress-network:
+      wordpress-net:
         aliases:
           - wordpress-db    
 
@@ -77,7 +77,7 @@ services:
       - wordpress_data:/var/www/html
 
     networks:
-      - wordpress-network
+      - wordpress-net
       
   wireguard:
     image: lscr.io/linuxserver/wireguard:latest
@@ -126,8 +126,14 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1
 
     networks:
-      wireguard_net:
-        ipv4_address: 172.21.0.2
+      verein-net:
+        ipv4_address: 172.18.0.10
+      monitor-net:
+        ipv4_address: 172.19.0.10
+      wordpress-net:
+        ipv4_address: 172.20.0.10
+      wireguard-net:
+        ipv4_address: 172.21.0.10
 
 networks:
   verein-net:
@@ -142,13 +148,13 @@ networks:
       config:
         - subnet: 172.19.0.0/16
           gateway: 172.19.0.1
-  wordpress-network:
+  wordpress-net:
     driver: bridge
     ipam:
       config:
         - subnet: 172.20.0.0/16
           gateway: 172.20.0.1
-  wireguard_net:
+  wireguard-net:
     driver: bridge
     ipam:
       config:
